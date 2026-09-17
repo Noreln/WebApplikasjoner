@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\BookingApplication\\BookingApplication.csproj": {}
+    "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {}
   },
   "projects": {
-    "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\BookingApplication\\BookingApplication.csproj": {
+    "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\BookingApplication\\BookingApplication.csproj",
+        "projectUniqueName": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
         "projectName": "BookingApplication",
-        "projectPath": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\BookingApplication\\BookingApplication.csproj",
+        "projectPath": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
         "packagesPath": "C:\\Users\\skacp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\BookingApplication\\obj\\",
+        "outputPath": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\skacp\\AppData\\Roaming\\NuGet\\NuGet.Config"
