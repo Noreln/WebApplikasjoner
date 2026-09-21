@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SessionBooking.Models;
 
-public class ItemDbContext : DbContext
+public class RoomDbContext : DbContext
 {
-  public ItemDbContext(DbContextOptions<ItemDbContext> options) : base(options)
+  public RoomDbContext(DbContextOptions<RoomDbContext> options) : base(options)
   {
     Database.EnsureCreated();
   }
