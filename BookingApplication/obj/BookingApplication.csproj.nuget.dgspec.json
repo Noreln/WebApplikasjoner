@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {}
+    "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {}
   },
   "projects": {
-    "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {
+    "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
+        "projectUniqueName": "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
         "projectName": "BookingApplication",
-        "projectPath": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
-        "packagesPath": "C:\\Users\\skacp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\skacp\\Desktop\\Webapplikasjoner\\FirstObligatoryAssignment\\WebApplikasjoner\\BookingApplication\\obj\\",
+        "projectPath": "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
+        "packagesPath": "C:\\Users\\norel\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\skacp\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\norel\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -45,6 +45,24 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.*, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[10.*, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.*, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
