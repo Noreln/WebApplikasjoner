@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {}
+    "C:\\Users\\norel\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {}
   },
   "projects": {
-    "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {
+    "C:\\Users\\norel\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
+        "projectUniqueName": "C:\\Users\\norel\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
         "projectName": "BookingApplication",
-        "projectPath": "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
+        "projectPath": "C:\\Users\\norel\\WebApplikasjoner\\BookingApplication\\BookingApplication.csproj",
         "packagesPath": "C:\\Users\\norel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\norel\\Desktop\\WebApplikasjoner\\BookingApplication\\obj\\",
+        "outputPath": "C:\\Users\\norel\\WebApplikasjoner\\BookingApplication\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\norel\\AppData\\Roaming\\NuGet\\NuGet.Config"

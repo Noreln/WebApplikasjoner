@@ -1,4 +1,4 @@
-namespace SessionBooking.Models;
+namespace BookingApplication.Models;
 
 public class Room
 {
