@@ -1,0 +1,7 @@
+@model Room
+<form asp-action="Edit" method="post">
+  <input type="hidden" asp-for="Id" />
+  <label asp-for="Name"></label>
+  <input asp-for="Name" />
+  <button type="submit">Save</button>
+</form>

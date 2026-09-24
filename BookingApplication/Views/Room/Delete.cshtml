@@ -1,0 +1,6 @@
+@model Room
+<p> Are you sure you want to delete "@Model.Name"?</p>
+<form asp-action="DeleteConfirmed" method="post">
+<input type="hidden" asp-for="Id" />
+<button type="submit">Yes, delete</button>
+</form>
