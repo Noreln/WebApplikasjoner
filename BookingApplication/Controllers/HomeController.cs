@@ -26,4 +26,14 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+    [HttpPost]
+    public IActionResult SearchRooms(RoomSearchViewModel model)
+    {
+        // We'll implement the actual room search later.
+
+        return View("SearchResults", model);
+    }
 }
+
+
+

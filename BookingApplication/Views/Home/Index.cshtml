@@ -1,8 +1,69 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model BookingApplication.Models.RoomSearchViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="booking-search">
+    <div class="container">
+
+        <div class="text-center mb-4">
+            <h1>Book a room for your next meeting</h1>
+            <p class="text-muted">
+                Find an available room that fits your needs.
+            </p>
+        </div>
+
+        <form asp-controller="Home"
+              asp-action="SearchRooms"
+              method="post">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- Date -->
+                <div class="col-md-3">
+                    <label asp-for="Date" class="form-label">
+                        📅 Date
+                    </label>
+
+                    <input asp-for="Date"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+                <!-- Time -->
+                <div class="col-md-3">
+                    <label asp-for="Time" class="form-label">
+                        🕐 Time
+                    </label>
+
+                    <input asp-for="Time"
+                           type="time"
+                           class="form-control" />
+                </div>
+
+                <!-- People -->
+                <div class="col-md-3">
+                    <label asp-for="People" class="form-label">
+                        👥 People
+                    </label>
+
+                    <input asp-for="People"
+                           type="number"
+                           min="1"
+                           class="form-control" />
+                </div>
+
+                <!-- Search -->
+                <div class="col-md-3">
+                    <button type="submit"
+                            class="btn btn-primary w-100">
+                        🔍 Find rooms
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
 </div>
