@@ -16,6 +16,7 @@
         <form asp-controller="Home"
               asp-action="SearchRooms"
               method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>  
 
             <div class="row g-3 align-items-end">
 
@@ -28,6 +29,7 @@
                     <input asp-for="Date"
                            type="date"
                            class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>          
                 </div>
 
                 <!-- Time -->
@@ -39,6 +41,7 @@
                     <input asp-for="Time"
                            type="time"
                            class="form-control" />
+                    <span asp-validation-for="Time" class="text-danger"></span>       
                 </div>
 
                 <!-- People -->
@@ -51,6 +54,7 @@
                            type="number"
                            min="1"
                            class="form-control" />
+                    <span asp-validation-for="People" class="text-danger"></span>       
                 </div>
 
                 <!-- Search -->
