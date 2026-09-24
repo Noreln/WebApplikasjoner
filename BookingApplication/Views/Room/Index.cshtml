@@ -1,0 +1,14 @@
+
+@model List<Room>
+
+<a asp-action="Create">+ New Room</a>
+
+  @foreach (var room in Model)
+{
+  <p>
+    @room.Name
+    <a asp-action="Edit" asp-route-id="@room.Id">Edit</a>
+    <a asp-action="Delete" asp-route-id="@room.Id">Delete</a>
+    </p>
+
+}
