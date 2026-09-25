@@ -29,3 +29,33 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.available-rooms {
+    padding: 60px 0;
+}
+
+.available-rooms h2 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.room-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.room-card .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.room-details {
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
