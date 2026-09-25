@@ -6,10 +6,43 @@ namespace BookingApplication.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+public IActionResult Index()
+{
+    var model = new RoomSearchViewModel
     {
-        return View();
-    }
+        AvailableRooms =
+        [
+            new AvailableRoomViewModel
+            {
+                Id = 1,
+                Name = "Meeting Room A",
+                Capacity = 8,
+                Location = "Building A · 2nd floor",
+                Description = "Small meeting room with display."
+            },
+
+            new AvailableRoomViewModel
+            {
+                Id = 2,
+                Name = "Conference Room B",
+                Capacity = 20,
+                Location = "Building A · 1st floor",
+                Description = "Large conference room with projector."
+            },
+
+            new AvailableRoomViewModel
+            {
+                Id = 3,
+                Name = "Meeting Room C",
+                Capacity = 6,
+                Location = "Building B · 3rd floor",
+                Description = "Quiet meeting room with whiteboard."
+            }
+        ]
+    };
+
+    return View(model);
+}
 
     public IActionResult Privacy()
     {
@@ -33,6 +66,8 @@ public class HomeController : Controller
 
         return View("SearchResults", model);
     }
+
+    
 }
 
 
