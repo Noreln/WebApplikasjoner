@@ -4,6 +4,7 @@ namespace BookingApplication.Models;
 
 public class RoomSearchViewModel : IValidatableObject
 {
+    [DateCannotBeInThePast]
     public DateTime Date { get; set; } = DateTime.Today;
     [Range(typeof(TimeSpan),"09:00","22:00",ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
     public TimeSpan StartTime { get; set; } = new TimeSpan(9, 0, 0);
