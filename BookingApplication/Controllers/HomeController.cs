@@ -63,7 +63,10 @@ public IActionResult Index()
     public IActionResult SearchRooms(RoomSearchViewModel model)
     {
         // We'll implement the actual room search later.
-
+        if(!ModelState.IsValid)
+        {
+        return View("Index",model);    
+        }
         return View("SearchResults", model);
     }
 
