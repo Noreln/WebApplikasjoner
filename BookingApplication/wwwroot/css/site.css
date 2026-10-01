@@ -59,3 +59,33 @@ body {
     margin-top: 20px;
     font-size: 0.95rem;
 }
+
+.login-page {
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 15px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h1 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.login-card .form-control {
+    height: 48px;
+}
+
+.login-card .btn {
+    height: 48px;
+}
