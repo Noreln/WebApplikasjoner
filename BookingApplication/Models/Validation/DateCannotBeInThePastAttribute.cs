@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+//Took inspiration from: https://medium.com/@syeedmdtalha/custom-validator-in-asp-net-core-mvc-beginner-friendly-8625d1178492 
 public class DateCannotBeInThePastAttribute : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
