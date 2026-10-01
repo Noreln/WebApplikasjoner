@@ -1,15 +1,49 @@
 
 @model List<Room>
+@{
+  ViewData["Title"] = "Rooms";
+}
 
-<a asp-action="Create">+ New Room</a>
+<div class="container">
 
-  @foreach (var room in Model)
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Rooms</h1>
+    <a asp-action="Create" class="btn btn-primary">+ New Room</a>
+  </div>
+
+  <div class="row g-4">
+      @foreach (var room in Model)
 {
-  <p>
-    @room.Name
-    <a asp-action="Edit" asp-route-id="@room.Id">Edit</a>
-    <a asp-action="Delete" asp-route-id="@room.Id">Delete</a>
-    <a asp-controller="Booking" asp-action="Create" asp-route-roomId="@room.Id">Book this room</a>
-    </p>
+  <div class="col-md-6 col-lg-4">
+    <div class="card room-card h-100">
+      <div class="card-body">
+          <h3 class="card-title">@room.Name</h3>
+          <p class="text-muted">📍 @room.Location</p>
+
+          @if (!string.IsNullOrEmpty(room.Description))
+            {
+              <p class="card-text">@room.Description</p>
+            }
+
+            <p>@room.Capacity people</p>
+          </div>
+            <div class="card-footer bg-white border-0 d-flex gap-2">
+                <a asp-controller="Booking" asp-action="Create" asp-route-roomId="@room.Id" class="btn btn-primary btn-sm flex-grow-1">
+                  Book
+                </a>
+                  <a asp-action="Edit" asp-route-id="@room.Id" class="btn btn-outline-secondary btn-sm">
+                    Edit
+                    </a>
+                      <a asp-action="Delete" asp-route-id="@room.Id" class="btn btn-outline-danger btn-sm">
+                        Delete
+                        </a>
+            </div>
+    </div>
+  </div>
+
 
 }
+  </div>
+</div>
+
+
