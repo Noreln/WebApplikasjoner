@@ -55,6 +55,9 @@ return View(rooms);
     }
 
     room.Name = updatedRoom.Name;
+    room.Capacity = updatedRoom.Capacity;
+    room.Location = updatedRoom.Location;
+    room.Description = updatedRoom.Description;
     dbContext.SaveChanges();
     return RedirectToAction("Index");
   }

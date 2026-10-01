@@ -8,6 +8,7 @@ public class RoomDbContext : DbContext
   {
   }
     public DbSet<Room> Rooms {get; set;}
+    public DbSet<Booking> Bookings { get; set; }
   }
 
 

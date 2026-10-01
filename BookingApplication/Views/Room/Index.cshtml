@@ -9,6 +9,7 @@
     @room.Name
     <a asp-action="Edit" asp-route-id="@room.Id">Edit</a>
     <a asp-action="Delete" asp-route-id="@room.Id">Delete</a>
+    <a asp-controller="Booking" asp-action="Create" asp-route-roomId="@room.Id">Book this room</a>
     </p>
 
 }

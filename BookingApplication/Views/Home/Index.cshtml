@@ -132,6 +132,10 @@
                                 <a asp-controller="Booking"
                                    asp-action="Create"
                                    asp-route-roomId="@room.Id"
+                                   asp-route-date="@Model.Date.ToString("yyyy-MM-dd")"
+                                   asp-route-startTime="@Model.StartTime"
+                                   asp-route-endTime="@Model.EndTime"
+                                   asp-route-people="@Model.People"
                                    class="btn btn-primary w-100">
                                     Book room
                                 </a>

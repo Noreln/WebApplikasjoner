@@ -1,0 +1,39 @@
+@model Booking
+@{
+   var room = ViewBag.Room as Room;
+}
+
+<h2>Book @room?.Name</h2>
+<p class="text-muted">📍 @room?.Location &middot; capacity @room?.Capacity </p>
+
+<form asp-action="Create" method="post">
+  <input type="hidden" asp-for="RoomId"/>
+  <div asp-validation-summary="All" class="text-danger"></div>
+
+  <div class="mb-3">
+    <label asp-for="BookedBy" class="form-label">Your name</label>
+    <input asp-for="BookedBy" class="form-control" />
+  </div>
+
+    <div class="mb-3">
+    <label asp-for="Date" class="form-label">Date</label>
+    <input asp-for="Date" type="date" class="form-control" />
+  </div>
+
+  <div class="mb-3">
+    <label asp-for="StartTime" class="form-label">Start</label>
+    <input asp-for="StartTime" type="time" class="form-control" />
+  </div>
+
+  <div class="mb-3">
+    <label asp-for="EndTime" class="form-label">End</label>
+    <input asp-for="EndTime" type="time" class="form-control" />
+  </div>
+
+  <div class="mb-3">
+    <label asp-for="People" class="form-label">People</label>
+    <input asp-for="People" type="number" class="form-control" />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Confirm Booking</button>
+</form>

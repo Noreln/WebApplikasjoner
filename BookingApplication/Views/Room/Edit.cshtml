@@ -1,7 +1,18 @@
 @model Room
 <form asp-action="Edit" method="post">
   <input type="hidden" asp-for="Id" />
+
   <label asp-for="Name"></label>
   <input asp-for="Name" />
+
+  <label asp-for="Capacity"></label>
+  <input asp-for="Capacity" type="number"/>
+
+  <label asp-for="Location"></label>
+  <input asp-for="Location"/>
+
+  <label asp-for="Description"></label>
+  <input asp-for="Description"/>
+
   <button type="submit">Save</button>
 </form>

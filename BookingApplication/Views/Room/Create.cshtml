@@ -2,5 +2,15 @@
 <form asp-action="Create" method="post">
   <label asp-for="Name"></label>
   <input asp-for="Name" />
+
+  <label asp-for="Capacity"></label>
+  <input asp-for="Capacity" type="number"/>
+
+  <label asp-for="Location"></label>
+  <input asp-for="Location"/>
+
+  <label asp-for="Description"></label>
+  <input asp-for="Description"/>
+
   <button type="submit">Create</button>
 </form>

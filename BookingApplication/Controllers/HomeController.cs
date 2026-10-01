@@ -64,7 +64,7 @@ public IActionResult Index()
     {
         // We'll implement the actual room search later.
 
-        return View("SearchResults", model);
+        return RedirectToAction("Index", "Room");
     }
 
     
