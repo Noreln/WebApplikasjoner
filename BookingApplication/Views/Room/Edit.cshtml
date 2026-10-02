@@ -1,18 +1,48 @@
 @model Room
-<form asp-action="Edit" method="post">
-  <input type="hidden" asp-for="Id" />
+@{
+  ViewData["Title"] = "Edit Room";
+}
 
-  <label asp-for="Name"></label>
-  <input asp-for="Name" />
+<div class="container">
 
-  <label asp-for="Capacity"></label>
-  <input asp-for="Capacity" type="number"/>
+  <div class="text-center mb-4">
+    <h1>Edit Room</h1>
+  </div>
 
-  <label asp-for="Location"></label>
-  <input asp-for="Location"/>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class=" card room-card">
+        <div class="card-body">
 
-  <label asp-for="Description"></label>
-  <input asp-for="Description"/>
+          <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-  <button type="submit">Save</button>
-</form>
+              <div class="mb-3">
+                  <label asp-for="Name" class="form-label"></label>
+                  <input asp-for="Name" class="form-control" /> 
+              </div>
+            
+               <div class="mb-3">
+            <label asp-for="Capacity" class="form-label"></label>
+            <input asp-for="Capacity" type="number" class="form-control"/>
+              </div>
+
+               <div class="mb-3">
+            <label asp-for="Location" class="form-label"></label>
+            <input asp-for="Location" class="form-control"/>
+              </div>
+
+               <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <input asp-for="Description" class="form-control"/>
+              </div>
+
+            <button type="submit" class="btn btn-primary w-100">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
