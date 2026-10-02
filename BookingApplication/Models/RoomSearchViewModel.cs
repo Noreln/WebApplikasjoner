@@ -10,7 +10,7 @@ public class RoomSearchViewModel : IValidatableObject
     public TimeSpan StartTime { get; set; } = new TimeSpan(9, 0, 0);
     [Range(typeof(TimeSpan),"09:00","22:00",ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
     public TimeSpan EndTime { get; set; } = new TimeSpan(10, 0, 0);
-
+    //Took inspiration from: https://medium.com/@syeedmdtalha/custom-validator-in-asp-net-core-mvc-beginner-friendly-8625d1178492 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
     if(EndTime<=StartTime)
@@ -21,7 +21,7 @@ public class RoomSearchViewModel : IValidatableObject
             );
         }    
     }
-    [Range(1,10,ErrorMessage = "The number of people must be between 1 and 10")]
+    [Range(1,12,ErrorMessage = "The number of people must be between 1 and 12")]
     public int People { get; set; } = 1;
 
     public List<AvailableRoomViewModel> AvailableRooms { get; set; } = [];
