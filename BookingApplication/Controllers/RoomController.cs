@@ -30,6 +30,10 @@ return View(rooms);
   [HttpPost]
   public IActionResult Create(Room room)
   {
+    if(!ModelState.IsValid)
+    {
+    return View(room);  
+    }
     dbContext.Rooms.Add(room);
     dbContext.SaveChanges();
     return RedirectToAction("Index");
