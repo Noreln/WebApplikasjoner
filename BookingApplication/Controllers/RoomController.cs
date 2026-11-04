@@ -1,26 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using BookingApplication.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
+using BookingApplication.Repositories;
 
 namespace BookingApplication.Controllers;
 
 public class RoomController : Controller
 {
-  private readonly RoomDbContext dbContext;
+  private readonly IRoomRepository _roomRepository;
 
-  public RoomController(RoomDbContext dbContext)
+  public RoomController(IRoomRepository roomRepository)
   {
-    this.dbContext = dbContext;
+    _roomRepository = roomRepository;
   }
 
-    public IActionResult Index()
+  public async Task<IActionResult> Index()
   {
-    
-List<Room> rooms = dbContext.Rooms.ToList();
-return View(rooms);
-
+    List<Room> rooms = await _roomRepository.GetAllAsync();
+    return View(rooms);
   }
   public IActionResult Create()
   {
@@ -28,21 +24,21 @@ return View(rooms);
   }
 
   [HttpPost]
-  public IActionResult Create(Room room)
+  public async Task<IActionResult> Create(Room room)
   {
     if(!ModelState.IsValid)
     {
     return View(room);  
     }
-    dbContext.Rooms.Add(room);
-    dbContext.SaveChanges();
+    await _roomRepository.AddAsync(room);
+
     return RedirectToAction("Index");
   }
 
-  public IActionResult Edit(int id)
+  public async Task<IActionResult> Edit(int id)
   {
-    Room? room = dbContext.Rooms.FirstOrDefault(r => r.Id == id);
-    if(room == null)
+    Room? room = await _roomRepository.GetByIdAsync(id);
+    if (room == null)
     {
       return NotFound();
     }
@@ -50,26 +46,27 @@ return View(rooms);
   }
 
   [HttpPost]
-  public IActionResult Edit(int id, Room updatedRoom)
+  public async Task<IActionResult> Edit(int id, Room updatedRoom)
   {
-    Room? room = dbContext.Rooms.FirstOrDefault(r => r.Id == id);
+    Room? room = await _roomRepository.GetByIdAsync(id);
     if (room == null)
     {
       return NotFound();
     }
+
 
     room.Name = updatedRoom.Name;
     room.Capacity = updatedRoom.Capacity;
     room.Location = updatedRoom.Location;
     room.Description = updatedRoom.Description;
-    dbContext.SaveChanges();
+    await _roomRepository.UpdateAsync(room);
     return RedirectToAction("Index");
   }
 
-  public IActionResult Delete(int id)
+  public async Task<IActionResult> Delete(int id)
   {
-    Room? room = dbContext.Rooms.FirstOrDefault(r => r.Id == id);
-    if(room == null)
+    Room? room = await _roomRepository.GetByIdAsync(id);
+    if (room == null)
     {
       return NotFound();
     }
@@ -77,16 +74,15 @@ return View(rooms);
   }
 
   [HttpPost]
-  public IActionResult DeleteConfirmed(int id)
+  public async Task<IActionResult> DeleteConfirmed(int id)
   {
-    Room? room = dbContext.Rooms.FirstOrDefault(r => r.Id == id);
+    Room? room = await _roomRepository.GetByIdAsync(id);
     if (room == null)
     {
       return NotFound();
     }
 
-    dbContext.Rooms.Remove(room);
-    dbContext.SaveChanges();
+    await _roomRepository.DeleteAsync(room);
     return RedirectToAction("Index");
   }
 
