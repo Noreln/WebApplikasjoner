@@ -18,6 +18,15 @@ public class RoomRepository : IRoomRepository
     return await _db.Rooms.ToListAsync();
   }
 
+  public async Task<List<Room>> SearchRooms(DateTime Date,TimeOnly StartTime,TimeOnly EndTime,int People)
+  {
+    var rooms=await _db.Rooms
+    .Where(r=> r.Capacity>=People)
+    .Where(r => !r.Bookings.Any(b=> b.Date==Date && b.StartTime<EndTime && b.EndTime>StartTime))
+    .ToListAsync();
+    return rooms;
+  }
+  
   public async Task<Room?> GetByIdAsync(int id)
   {
     return await _db.Rooms.FirstOrDefaultAsync(r => r.Id == id);

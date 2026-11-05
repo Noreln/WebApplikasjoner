@@ -62,16 +62,19 @@ public IActionResult Index()
     [HttpPost]
     public IActionResult SearchRooms(RoomSearchViewModel model)
     {
-        // We'll implement the actual room search later.
         if(!ModelState.IsValid)
         {
         return View("Index",model);    
         }
-        return RedirectToAction("Index", "Room");
+        return RedirectToAction("Index", "Room",new
+        {
+        Date=model.Date,
+        StartTime=model.StartTime,
+        EndTime=model.EndTime,
+        People=model.People
+        });
     }
-
-    
-}
+    }
 
 
 

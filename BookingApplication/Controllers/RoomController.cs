@@ -13,9 +13,9 @@ public class RoomController : Controller
     _roomRepository = roomRepository;
   }
 
-  public async Task<IActionResult> Index()
+  public async Task<IActionResult> Index(RoomSearchViewModel model)
   {
-    List<Room> rooms = await _roomRepository.GetAllAsync();
+    List<Room> rooms = await _roomRepository.SearchRooms(model.Date,model.StartTime,model.EndTime,model.People);
     return View(rooms);
   }
   public IActionResult Create()
