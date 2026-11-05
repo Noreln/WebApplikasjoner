@@ -16,7 +16,7 @@ public class BookingController : Controller
     this.logger = logger;
   }
 
-  public IActionResult Create(int roomId, DateTime date, TimeSpan startTime, TimeSpan endTime, int people)
+  public IActionResult Create(int roomId, DateTime date, TimeOnly startTime, TimeOnly endTime, int people)
   {
     Room? room = dbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
     if (room == null)
