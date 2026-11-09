@@ -1,24 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using BookingApplication.Models;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using BookingApplication.Repositories;
 
 namespace BookingApplication.Controllers;
 
 public class BookingController : Controller
 {
-  private readonly RoomDbContext dbContext;
-  private readonly ILogger<BookingController> logger;
+  private readonly IRoomRepository _roomRepository;
+  private readonly IBookingRepository _bookingRepository;
+  private readonly ILogger<BookingController> _logger;
 
-  public BookingController (RoomDbContext dbContext, ILogger <BookingController> logger)
+  public BookingController(IRoomRepository roomRepository,
+                          IBookingRepository bookingRepository,
+                          ILogger<BookingController> logger)
   {
-    this.dbContext = dbContext;
-    this.logger = logger;
+    _roomRepository = roomRepository;
+    _bookingRepository = bookingRepository;
+    _logger = logger;
   }
 
-  public IActionResult Create(int roomId, DateTime date, TimeSpan startTime, TimeSpan endTime, int people)
+  public async Task<IActionResult> Create(int roomId, DateTime date, TimeSpan startTime, TimeSpan endTime, int people)
   {
-    Room? room = dbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+    Room? room = await _roomRepository.GetByIdAsync(roomId);
     if (room == null)
     {
       return NotFound();
@@ -27,7 +30,7 @@ public class BookingController : Controller
     var booking = new Booking
     {
       RoomId = roomId,
-      Date = date == default? DateTime.Today : date,
+      Date = date == default ? DateTime.Today : date,
       StartTime = startTime,
       EndTime = endTime,
       People = people == 0 ? 1 : people
@@ -38,17 +41,15 @@ public class BookingController : Controller
   }
 
   [HttpPost]
-  public IActionResult Create(Booking booking)
+  public async Task<IActionResult> Create(Booking booking)
   {
-    Room? room = dbContext.Rooms.FirstOrDefault(r => r.Id == booking.RoomId);
+    Room? room = await _roomRepository.GetByIdAsync(booking.RoomId);
     if (room == null)
     {
       return NotFound();
     }
 
-    var sameDayBookings = dbContext.Bookings
-        .Where(b => b.RoomId == booking.RoomId && b.Date == booking.Date)
-        .ToList();
+    var sameDayBookings = await _bookingRepository.GetByRoomAndDateAsync(booking.RoomId, booking.Date);
 
     bool overlaps = sameDayBookings.Any(b =>
     booking.StartTime < b.EndTime &&
@@ -59,12 +60,12 @@ public class BookingController : Controller
       ModelState.AddModelError(string.Empty, "This room is already booked for an overlapping time on that date/time.");
     }
 
-    if(booking.People > room.Capacity)
+    if (booking.People > room.Capacity)
     {
       ModelState.AddModelError(nameof(booking.People), $"This room only fits {room.Capacity} people.");
     }
 
-    if(!ModelState.IsValid)
+    if (!ModelState.IsValid)
     {
       ViewBag.Room = room;
       return View(booking);
@@ -72,15 +73,14 @@ public class BookingController : Controller
 
     try
     {
-      dbContext.Bookings.Add(booking);
-      dbContext.SaveChanges();
-      logger.LogInformation("Booking created for room {RoomId} by {BookedBy}.", booking.RoomId, booking.BookedBy);
+      await _bookingRepository.AddAsync(booking);
+      _logger.LogInformation("Booking created for room {RoomId} by {BookedBy}.", booking.RoomId, booking.BookedBy);
       return RedirectToAction("MyBookings", "Home", new { name = booking.BookedBy });
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
-      logger.LogError(ex, "Failed to save booking for room {RoomId}.", booking.RoomId);
-      ModelState.AddModelError(string.Empty, "Something went wrong while saving you booking. Please try again.");
+      _logger.LogError(ex, "Failed to save booking for room {RoomId}.", booking.RoomId);
+      ModelState.AddModelError(string.Empty, "Something went wrong while saving your booking. Please try again.");
       ViewBag.Room = room;
       return View(booking);
     }
