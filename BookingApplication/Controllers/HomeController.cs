@@ -2,16 +2,17 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BookingApplication.Models;
 using BookingApplication.Repositories;
+using BookingApplication.Services;
 
 namespace BookingApplication.Controllers;
 
 public class HomeController : Controller
 {
-private readonly IRoomRepository _roomRepository;
+private readonly IBookingService _bookingService;
 
-public HomeController(IRoomRepository roomRepository)
+public HomeController(IBookingService bookingService)
   {
-    _roomRepository = roomRepository;
+    _bookingService=bookingService; 
   }
 
 public async Task<IActionResult> Index(RoomSearchViewModel model)
@@ -20,7 +21,7 @@ public async Task<IActionResult> Index(RoomSearchViewModel model)
     {
     return View(model);        
     }
-    List<AvailableRoomViewModel> rooms = await _roomRepository.SearchRooms(model.Date,model.StartTime,model.EndTime,model.People);
+    List<AvailableRoomViewModel> rooms = await _bookingService.SearchRooms(model.Date,model.StartTime,model.EndTime,model.People);
     model.AvailableRooms=rooms;
     return View(model);
   }

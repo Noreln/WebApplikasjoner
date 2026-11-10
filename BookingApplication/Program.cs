@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using BookingApplication.Models;
 using BookingApplication.Repositories;
+using BookingApplication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<RoomDbContext>(options =>
 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService,BookingService>();
 
 var app = builder.Build();
 
