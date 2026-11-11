@@ -19,7 +19,9 @@ public class BookingController : Controller
     _logger = logger;
   }
 
-  public async Task<IActionResult> Create(int roomId, DateTime date, TimeSpan startTime, TimeSpan endTime, int people)
+
+  public async Task<IActionResult> Create(int roomId, DateTime date, TimeOnly startTime, TimeOnly endTime, int people)
+
   {
     Room? room = await _roomRepository.GetByIdAsync(roomId);
     if (room == null)

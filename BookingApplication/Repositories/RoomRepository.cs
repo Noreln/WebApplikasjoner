@@ -18,6 +18,13 @@ public class RoomRepository : IRoomRepository
     return await _db.Rooms.ToListAsync();
   }
 
+  public async Task<List<Room>> GetRoomsByMinCapacity(int people)
+  {
+  return await _db.Rooms
+  .Where(r=> r.Capacity>=people)
+  .ToListAsync();
+  }
+  
   public async Task<Room?> GetByIdAsync(int id)
   {
     return await _db.Rooms.FirstOrDefaultAsync(r => r.Id == id);

@@ -20,21 +20,25 @@
           <div class="mb-3">
             <label asp-for="Name" class="form-label"></label>
             <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
           </div>
 
           <div class="mb-3">
             <label asp-for="Capacity" class="form-label"></label>
             <input asp-for="Capacity" type="number" class="form-control" />
+            <span asp-validation-for="Capacity" class="text-danger"></span>
           </div>
 
         <div class="mb-3">
               <label asp-for="Location" class="form-label"></label>
               <input asp-for="Location" class="form-control" />
+              <span asp-validation-for="Location" class="text-danger"></span>
           </div>
 
           <div class="mb-3">
             <label asp-for="Description" class="form-label"></label>
             <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
           </div>
 
           <button type="submit" class="btn btn-primary w-100 mt-2">Create</button>

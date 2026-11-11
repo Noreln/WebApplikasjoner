@@ -6,6 +6,7 @@ namespace BookingApplication.Repositories;
 public interface IBookingRepository
 {
   Task<Booking?> GetByIdAsync(int id);
+  Task<List<Booking>>GetByDateAsync(DateTime date);
   Task<List<Booking>> GetByRoomAndDateAsync(int roomId, DateTime date);
   Task<List<Booking>> GetByBookedByAsync(string bookedBy);
   Task AddAsync(Booking booking);

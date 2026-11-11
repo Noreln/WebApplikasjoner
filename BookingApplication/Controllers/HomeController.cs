@@ -1,48 +1,30 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BookingApplication.Models;
+using BookingApplication.Repositories;
+using BookingApplication.Services;
 
 namespace BookingApplication.Controllers;
 
 public class HomeController : Controller
 {
-public IActionResult Index()
-{
-    var model = new RoomSearchViewModel
+private readonly IBookingService _bookingService;
+
+public HomeController(IBookingService bookingService)
+  {
+    _bookingService=bookingService; 
+  }
+
+public async Task<IActionResult> Index(RoomSearchViewModel model)
+  {
+    if(!ModelState.IsValid)
     {
-        AvailableRooms =
-        [
-            new AvailableRoomViewModel
-            {
-                Id = 1,
-                Name = "Meeting Room A",
-                Capacity = 8,
-                Location = "Building A · 2nd floor",
-                Description = "Small meeting room with display."
-            },
-
-            new AvailableRoomViewModel
-            {
-                Id = 2,
-                Name = "Conference Room B",
-                Capacity = 20,
-                Location = "Building A · 1st floor",
-                Description = "Large conference room with projector."
-            },
-
-            new AvailableRoomViewModel
-            {
-                Id = 3,
-                Name = "Meeting Room C",
-                Capacity = 6,
-                Location = "Building B · 3rd floor",
-                Description = "Quiet meeting room with whiteboard."
-            }
-        ]
-    };
-
+    return View(model);        
+    }
+    List<AvailableRoomViewModel> rooms = await _bookingService.SearchRooms(model.Date,model.StartTime,model.EndTime,model.People);
+    model.AvailableRooms=rooms;
     return View(model);
-}
+  }
 
     public IActionResult Privacy()
     {
@@ -62,16 +44,19 @@ public IActionResult Index()
     [HttpPost]
     public IActionResult SearchRooms(RoomSearchViewModel model)
     {
-        // We'll implement the actual room search later.
         if(!ModelState.IsValid)
         {
         return View("Index",model);    
         }
-        return RedirectToAction("Index", "Room");
+        return RedirectToAction("Index", "Home",new
+        {
+        Date=model.Date.ToString("yyyy-MM-dd"),
+        StartTime=model.StartTime,
+        EndTime=model.EndTime,
+        People=model.People
+        });
     }
-
-    
-}
+    }
 
 
 

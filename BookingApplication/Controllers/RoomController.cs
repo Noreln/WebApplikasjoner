@@ -26,7 +26,12 @@ public class RoomController : Controller
   [HttpPost]
   public async Task<IActionResult> Create(Room room)
   {
+    if(!ModelState.IsValid)
+    {
+    return View(room);  
+    }
     await _roomRepository.AddAsync(room);
+
     return RedirectToAction("Index");
   }
 
