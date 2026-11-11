@@ -1,5 +1,4 @@
 namespace BookingApplication.Models;
-
 /// <summary> Data for My Bookings page: the search name and the matching bookings </summary>
 public class MyBookingsViewModel
 {
