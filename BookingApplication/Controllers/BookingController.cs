@@ -46,7 +46,6 @@ public class BookingController : Controller
   /// <summary>
   /// Creates a new booking after checking input and domain rules.
   /// </summary>
-
   [HttpPost]
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> Create(BookingFormViewModel model)
@@ -201,6 +200,74 @@ public class BookingController : Controller
     }
   }
 
+  /// <summary>
+  ///  Shows a confirmation page before a booking is cancelled.
+  /// </summary>
+  public async Task<IActionResult> Cancel(int id)
+  {
+    try
+    {
+      Booking? booking = await _bookingRepository.GetByIdAsync(id);
+      if (booking == null)
+      {
+        return NotFound();
+      }
+
+      Room? room = await _roomRepository.GetByIdAsync(booking.RoomId);
+      if (room == null)
+      {
+        return NotFound();
+      }
+
+      var model = new BookingListItemViewModel
+      {
+        Id = booking.Id,
+        RoomName = room.Name,
+        RoomLocation = room.Location,
+        Date = booking.Date,
+        StartTime = booking.StartTime,
+        EndTime = booking.EndTime,
+        People = booking.People
+      };
+
+      return View(model);
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "Failed to load booking {BookingId} for cancelling.", id);
+      return RedirectToAction("Index", "Home");
+    }
+  }
+
+  /// <summary>
+  /// Deletes the booking after the user has confirmed.
+  /// </summary>
+  [HttpPost]
+  [ActionName("Cancel")]
+  [ValidateAntiForgeryToken]
+  public async Task<IActionResult> CancelConfirmed(int id)
+  {
+    try
+    {
+      Booking? booking = await _bookingRepository.GetByIdAsync(id);
+      if (booking == null)
+      {
+        return NotFound();
+      }
+      //Remember the name before deleting, so we can go back to the user's list.
+      string bookedBy = booking.BookedBy;
+
+      await _bookingRepository.DeleteAsync(booking);
+      _logger.LogInformation("Booking {BookingId} cancelled by {BookedBy}.", id, bookedBy);
+
+      return RedirectToAction("MyBookings", "Home", new { name = bookedBy });
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "Failed to cancel booking {BookingId}.", id);
+      return RedirectToAction("Index", "Home");
+    }
+  }
 
   private static void FillRoomInfo(BookingFormViewModel model, Room room)
   {
