@@ -30,7 +30,7 @@ public class BookingController : Controller
       return NotFound();
     }
 
-    var booking = new Booking
+    var model = new BookingFormViewModel
     {
       RoomId = roomId,
       Date = date == default ? DateTime.Today : date,
@@ -38,41 +38,65 @@ public class BookingController : Controller
       EndTime = endTime,
       People = people == 0 ? 1 : people
     };
+    FillRoomInfo(model, room);
 
-    ViewBag.Room = room;
-    return View(booking);
+    return View(model);
   }
   [HttpPost]
-  public async Task<IActionResult> Create(Booking booking)
+  [ValidateAntiForgeryToken]
+  public async Task<IActionResult> Create(BookingFormViewModel model)
   {
-    Room? room = await _roomRepository.GetByIdAsync(booking.RoomId);
-    if (room == null)
-    {
-      return NotFound();
-    }
-    // Domain rules (overlap + capacity) are checked in BookingService
-    var ruleErrors = await _bookingService.ValidateBookingAsync(booking, room);
-    foreach (var error in ruleErrors)
-    {
-      ModelState.AddModelError(error.Field, error.Message);
-    }
-    if (!ModelState.IsValid)
-    {
-      ViewBag.Room = room;
-      return View(booking);
-    }
     try
     {
+      Room? room = await _roomRepository.GetByIdAsync(model.RoomId);
+      if (room == null)
+      {
+        return NotFound();
+      }
+
+      FillRoomInfo(model, room);
+
+      // Stop early if the form input itself is invalid (required fields, ranges, end after start.)
+      if (!ModelState.IsValid)
+      {
+        return View(model);
+      }
+
+      var booking = new Booking
+      {
+        RoomId = model.RoomId,
+        BookedBy = model.BookedBy.Trim(),
+        Date = model.Date,
+        StartTime = model.StartTime,
+        EndTime = model.EndTime,
+        People = model.People
+      };
+      // Domain rules (overlap + capacity) are checked in BookingService
+      var ruleErrors = await _bookingService.ValidateBookingAsync(booking, room);
+      foreach (var error in ruleErrors)
+      {
+        ModelState.AddModelError(error.Field, error.Message);
+      }
+      if (!ModelState.IsValid)
+      {
+        return View(model);
+      }
       await _bookingRepository.AddAsync(booking);
       _logger.LogInformation("Booking created for room {RoomId} by {BookedBy}.", booking.RoomId, booking.BookedBy);
       return RedirectToAction("MyBookings", "Home", new { name = booking.BookedBy });
     }
     catch (Exception ex)
     {
-      _logger.LogError(ex, "Failed to save booking for room {RoomId}.", booking.RoomId);
+      _logger.LogError(ex, "Failed to save booking for room {RoomId}.", model.RoomId);
       ModelState.AddModelError(string.Empty, "Something went wrong while saving your booking. Please try again.");
-      ViewBag.Room = room;
-      return View(booking);
+      return View(model);
     }
+  }
+
+  private static void FillRoomInfo(BookingFormViewModel model, Room room)
+  {
+    model.RoomName = room.Name;
+    model.RoomLocation = room.Location;
+    model.RoomCapacity = room.Capacity;
   }
 }
