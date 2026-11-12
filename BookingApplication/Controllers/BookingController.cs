@@ -1,27 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 using BookingApplication.Models;
 using BookingApplication.Repositories;
+using BookingApplication.Services;
 
 namespace BookingApplication.Controllers;
 
 public class BookingController : Controller
 {
+  private readonly IBookingService _bookingService;
   private readonly IRoomRepository _roomRepository;
   private readonly IBookingRepository _bookingRepository;
   private readonly ILogger<BookingController> _logger;
 
-  public BookingController(IRoomRepository roomRepository,
+  public BookingController(IBookingService bookingService,
+                          IRoomRepository roomRepository,
                           IBookingRepository bookingRepository,
                           ILogger<BookingController> logger)
   {
+    _bookingService = bookingService;
     _roomRepository = roomRepository;
     _bookingRepository = bookingRepository;
     _logger = logger;
   }
-
-
   public async Task<IActionResult> Create(int roomId, DateTime date, TimeOnly startTime, TimeOnly endTime, int people)
-
   {
     Room? room = await _roomRepository.GetByIdAsync(roomId);
     if (room == null)
@@ -41,7 +42,6 @@ public class BookingController : Controller
     ViewBag.Room = room;
     return View(booking);
   }
-
   [HttpPost]
   public async Task<IActionResult> Create(Booking booking)
   {
@@ -50,29 +50,17 @@ public class BookingController : Controller
     {
       return NotFound();
     }
-
-    var sameDayBookings = await _bookingRepository.GetByRoomAndDateAsync(booking.RoomId, booking.Date);
-
-    bool overlaps = sameDayBookings.Any(b =>
-    booking.StartTime < b.EndTime &&
-    booking.EndTime > b.StartTime);
-
-    if (overlaps)
+    // Domain rules (overlap + capacity) are checked in BookingService
+    var ruleErrors = await _bookingService.ValidateBookingAsync(booking, room);
+    foreach (var error in ruleErrors)
     {
-      ModelState.AddModelError(string.Empty, "This room is already booked for an overlapping time on that date/time.");
+      ModelState.AddModelError(error.Field, error.Message);
     }
-
-    if (booking.People > room.Capacity)
-    {
-      ModelState.AddModelError(nameof(booking.People), $"This room only fits {room.Capacity} people.");
-    }
-
     if (!ModelState.IsValid)
     {
       ViewBag.Room = room;
       return View(booking);
     }
-
     try
     {
       await _bookingRepository.AddAsync(booking);
