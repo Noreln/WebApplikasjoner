@@ -15,6 +15,7 @@ public class Room
     public string Location { get; set; } = string.Empty;
     [StringLength(200)]
     public string? Description { get; set; }
-    //Navigation property
-    public ICollection<Booking> Bookings { get; set;}= new List<Booking>();
+    //Navigation properties
+    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+    public ICollection<Equipment> Equipments { get; set; } = [];
 }

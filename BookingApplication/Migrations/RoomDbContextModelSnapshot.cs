@@ -50,6 +50,24 @@ namespace BookingApplication.Migrations
                     b.ToTable("Bookings");
                 });
 
+            modelBuilder.Entity("BookingApplication.Models.Equipment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Equipments");
+                });
+
             modelBuilder.Entity("BookingApplication.Models.Room", b =>
                 {
                     b.Property<int>("Id")
@@ -77,6 +95,21 @@ namespace BookingApplication.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("BookingApplication.Models.RoomEquipment", b =>
+                {
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EquipmentId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("RoomEquipments");
+                });
+
             modelBuilder.Entity("BookingApplication.Models.Booking", b =>
                 {
                     b.HasOne("BookingApplication.Models.Room", "Room")
@@ -84,6 +117,25 @@ namespace BookingApplication.Migrations
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("BookingApplication.Models.RoomEquipment", b =>
+                {
+                    b.HasOne("BookingApplication.Models.Equipment", "Equipment")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookingApplication.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
 
                     b.Navigation("Room");
                 });
