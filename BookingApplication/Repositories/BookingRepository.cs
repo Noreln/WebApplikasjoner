@@ -12,7 +12,7 @@ public class BookingRepository : IBookingRepository
   {
     _db = db;
   }
-  public async Task<List<Booking>>GetByDateAsync(DateTime date)
+  public async Task<List<Booking>> GetByDateAsync(DateTime date)
   {
    return await _db.Bookings
    .Where(b => b.Date == date) 
