@@ -17,6 +17,7 @@ public class EquipmentRepository : IEquipmentRepository
     public async Task<List<Equipment>> GetAllAsync()
     {
         return await _db.Equipments
+        .Include(e => e.Rooms)
         .OrderBy(e => e.Name)
         .ToListAsync();
     }
