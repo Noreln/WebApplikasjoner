@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingApplication.Repositories;
 
+/// <summary>
+/// Handles all database access for equipment using Entity Framework.
+/// </summary>
 public class EquipmentRepository : IEquipmentRepository
 {
     private readonly RoomDbContext _db;
@@ -14,7 +17,7 @@ public class EquipmentRepository : IEquipmentRepository
     public async Task<List<Equipment>> GetAllAsync()
     {
         return await _db.Equipments
-        .OrderBy(e=> e.Name)
+        .OrderBy(e => e.Name)
         .ToListAsync();
     }
     public async Task<Equipment?> GetByIdAsync(int id)
@@ -39,6 +42,15 @@ public class EquipmentRepository : IEquipmentRepository
     public async Task<bool> IsInUseAsync(int id)
     {
         return await _db.RoomEquipments.AnyAsync(re => re.EquipmentId == id);
+    }
+
+    public async Task<bool> NameExistsAsync(string name, int? excludeId = null)
+    {
+        string normalizedName = name.Trim().ToLower();
+
+        return await _db.Equipments.AnyAsync(e =>
+        e.Id != excludeId &&
+        e.Name.ToLower() == normalizedName);
     }
 }
 

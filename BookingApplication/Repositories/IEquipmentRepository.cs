@@ -1,7 +1,11 @@
 using BookingApplication.Models;
 
+
 namespace BookingApplication.Repositories;
 
+/// <summary>
+/// Defines the data opertations available for equipment
+/// </summary>
 public interface IEquipmentRepository
 {
     Task<List<Equipment>> GetAllAsync();
@@ -10,4 +14,6 @@ public interface IEquipmentRepository
     Task UpdateAsync(Equipment equipment);
     Task DeleteAsync(Equipment equipment);
     Task<bool> IsInUseAsync(int id);
+
+    Task<bool> NameExistsAsync(string name, int? excludeId = null);
 }
