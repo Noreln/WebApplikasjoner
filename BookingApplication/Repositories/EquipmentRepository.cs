@@ -53,5 +53,12 @@ public class EquipmentRepository : IEquipmentRepository
         e.Id != excludeId &&
         e.Name.ToLower() == normalizedName);
     }
+
+    public async Task<List<Equipment>> GetByIdsAsync(IEnumerable<int> ids)
+    {
+        return await _db.Equipments
+        .Where(e => ids.Contains(e.Id))
+        .ToListAsync();
+    }
 }
 

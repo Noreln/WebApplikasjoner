@@ -16,4 +16,5 @@ public interface IEquipmentRepository
     Task<bool> IsInUseAsync(int id);
 
     Task<bool> NameExistsAsync(string name, int? excludeId = null);
+    Task<List<Equipment>> GetByIdsAsync(IEnumerable<int> ids);
 }

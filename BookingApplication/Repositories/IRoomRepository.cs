@@ -8,6 +8,7 @@ public interface IRoomRepository
   Task<List<Room>> GetAllAsync();
   Task<List<Room>> GetRoomsByMinCapacity(int people);
   Task<Room?> GetByIdAsync(int id);
+  Task<Room?> GetByIdWithEquipmentAsync(int id);
   Task AddAsync(Room room);
   Task UpdateAsync(Room room);
   Task DeleteAsync(Room room);

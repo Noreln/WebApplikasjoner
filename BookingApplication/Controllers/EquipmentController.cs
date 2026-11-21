@@ -187,7 +187,7 @@ public class EquipmentController : Controller
 
       if (await _equipmentRepository.IsInUseAsync(id))
       {
-        _logger.LogWarning("Blocked deletion of equipment {EquipmentId} because it is in user.", id);
+        _logger.LogWarning("Blocked deletion of equipment {EquipmentId} because it is in use.", id);
         ModelState.AddModelError(string.Empty, "This equipment is used by one or more rooms. Remove it from those rooms first.");
         return View(new EquipmentFormViewModel { Id = equipment.Id, Name = equipment.Name });
       }

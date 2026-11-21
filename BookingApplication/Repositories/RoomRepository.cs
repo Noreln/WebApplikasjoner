@@ -30,6 +30,13 @@ public class RoomRepository : IRoomRepository
     return await _db.Rooms.FirstOrDefaultAsync(r => r.Id == id);
   }
 
+  public async Task<Room?> GetByIdWithEquipmentAsync(int id)
+  {
+    return await _db.Rooms
+    .Include(r => r.Equipments)
+    .FirstOrDefaultAsync(r => r.Id == id);
+  }
+
   public async Task AddAsync (Room room)
   {
     _db.Rooms.Add(room);
