@@ -29,9 +29,20 @@ public class HomeController : Controller
     {
       return View(model);
     }
-    List<AvailableRoomViewModel> rooms = await _bookingService.SearchRooms(model.Date, model.StartTime, model.EndTime, model.People);
-    model.AvailableRooms = rooms;
+    try
+    {
+      model.AvailableRooms = await _bookingService.SearchRooms(model.Date, model.StartTime, model.EndTime, model.People);
+      _logger.LogInformation("Room search for {Date:yyyy-MM-dd} {StartTime}-{EndTime}, {People} people: {Count} rooms found.",
+      model.Date, model.StartTime, model.EndTime, model.People, model.AvailableRooms.Count);
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "Room search failed for {Date:yyyy-MM-dd} {StartTime}-{EndTime}.",
+      model.Date, model.StartTime, model.EndTime);
+      ModelState.AddModelError(string.Empty, "Something went wrong while searching for rooms. Please try again.");
+    }
     return View(model);
+
   }
 
   public IActionResult Privacy()
@@ -77,6 +88,7 @@ public class HomeController : Controller
     return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
   }
   [HttpPost]
+  [ValidateAntiForgeryToken]
   public IActionResult SearchRooms(RoomSearchViewModel model)
   {
     if (!ModelState.IsValid)
