@@ -15,7 +15,10 @@ public class RoomRepository : IRoomRepository
 
   public async Task<List<Room>> GetAllAsync()
   {
-    return await _db.Rooms.ToListAsync();
+    return await _db.Rooms
+    .Include(r => r.Equipments)
+    .OrderBy(r => r.Name)
+    .ToListAsync();
   }
 
   public async Task<List<Room>> GetRoomsByMinCapacity(int people)

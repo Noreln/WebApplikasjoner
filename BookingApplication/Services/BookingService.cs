@@ -13,7 +13,9 @@ public class BookingService : IBookingService
     private readonly IBookingRepository _bookingRepository;
     private readonly ILogger<BookingService> _logger;
 
-    public BookingService(IRoomRepository roomRepository, IBookingRepository bookingRepository, ILogger<BookingService> logger)
+    public BookingService(IRoomRepository roomRepository,
+      IBookingRepository bookingRepository,
+      ILogger<BookingService> logger)
     {
         _roomRepository = roomRepository;
         _bookingRepository = bookingRepository;
@@ -67,7 +69,7 @@ public class BookingService : IBookingService
         {
             errors.Add(new BookingRuleError(nameof(Booking.People), $"This room only fits {room.Capacity} people."));
         }
-        if(errors.Count > 0)
+        if (errors.Count > 0)
         {
             _logger.LogInformation("Booking for room {RoomId} on {Date:yyyy-MM-dd} rejected: {Reasons}",
             booking.RoomId, booking.Date, string.Join(" ", errors.Select(e => e.Message)));

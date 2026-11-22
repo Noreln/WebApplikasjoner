@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using BookingApplication.Models;
 using BookingApplication.Repositories;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookingApplication.Controllers;
 
@@ -28,7 +27,20 @@ public class RoomController : Controller
     try
     {
       List<Room> rooms = await _roomRepository.GetAllAsync();
-      return View(rooms);
+
+      var model = rooms
+      .Select(r => new RoomListItemViewModel
+      {
+        Id = r.Id,
+        Name = r.Name,
+        Location = r.Location,
+        Description = r.Description,
+        Capacity = r.Capacity,
+        EquipmentNames = r.Equipments.Select(e => e.Name).OrderBy(n => n).ToList()
+      })
+      .ToList();
+
+      return View(model);
     }
     catch (Exception ex)
     {
