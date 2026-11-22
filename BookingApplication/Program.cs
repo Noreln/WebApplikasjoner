@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using BookingApplication.Models;
-using Microsoft.EntityFrameworkCore.Internal;
+using BookingApplication.Repositories;
+using BookingApplication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,13 +17,17 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<RoomDbContext>(options =>
 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
-    db.Database.EnsureCreated();
+   // db.Database.EnsureCreated();
 }
 
 // Configure the HTTP request pipeline.

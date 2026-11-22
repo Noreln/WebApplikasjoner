@@ -8,7 +8,7 @@ public class Booking: IValidatableObject
 
   [Required]
   public int RoomId { get; set; }
-
+  //Navigation property
   public Room? Room { get; set; }
 
   [Required(ErrorMessage = "Please enter your name. ")]
@@ -20,12 +20,12 @@ public class Booking: IValidatableObject
   public DateTime Date { get; set; } = DateTime.Today;
 
   [Required]
-  [Range(typeof(TimeSpan),"09:00","22:00",ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
-  public TimeSpan StartTime { get; set; }
+  [Range(typeof(TimeOnly),"09:00","22:00",ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
+  public TimeOnly StartTime { get; set; }
 
   [Required]
-  [Range(typeof(TimeSpan),"09:00","22:00",ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
-  public TimeSpan EndTime { get; set; }
+  [Range(typeof(TimeOnly),"09:00","22:00",ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
+  public TimeOnly EndTime { get; set; }
 
   public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
