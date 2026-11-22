@@ -1,0 +1,40 @@
+@model EquipmentFormViewModel
+@{
+  ViewData["Title"] = "Delete Equipment";
+}
+
+<div class="container">
+
+  <div class="text-center mb-4">
+    <h1>Delete Equipment</h1>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card room-card">
+        <div class="card-body text-center">
+
+          <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+          @* The controller adds an error if the equipment is still used by a room *@
+          @if (ViewData.ModelState.IsValid)
+          {
+            <p class="fs-5">Are you sure you want to delete "@Model.Name"?</p>
+            <p class="text-muted">This action cannot be undone.</p>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                  class="d-flex gap-2 justify-content-center mt-3">
+              <button type="submit" class="btn btn-danger">Yes, delete</button>
+              <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+          }
+          else
+          {
+            <a asp-action="Index" class="btn btn-outline-secondary mt-3">Back to equipment</a>
+          }
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

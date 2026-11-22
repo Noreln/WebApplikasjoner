@@ -7,5 +7,5 @@ public class EquipmentListItemViewModel
 
   public int RoomCount { get; set; }
 
-  public bool IsInUser => RoomCount > 0;
+  public bool IsInUse => RoomCount > 0;
 }

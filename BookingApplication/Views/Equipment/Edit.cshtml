@@ -1,0 +1,35 @@
+@model EquipmentFormViewModel
+@{
+  ViewData["Title"] = "Edit Equipment";
+}
+
+<div class="container">
+  
+  <div class="text-center mb-4">
+    <h1>Edit Equipment</h1>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card room-card">
+        <div class="card-body">
+
+          <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" asp-for="Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <partial name="_EquipmentFormFields" model="Model" />
+
+            <button type="submit" class="btn btn-primary w-100 mt-2">Save</button>
+            <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">Back to equipment</a>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}

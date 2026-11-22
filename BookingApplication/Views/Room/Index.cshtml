@@ -1,5 +1,4 @@
-
-@model List<Room>
+@model List<RoomListItemViewModel>
 @{
   ViewData["Title"] = "Rooms";
 }
@@ -12,37 +11,42 @@
   </div>
 
   <div class="row g-4">
-      @foreach (var room in Model)
-{
-  <div class="col-md-6 col-lg-4">
-    <div class="card room-card h-100">
-      <div class="card-body">
-          <h3 class="card-title">@room.Name</h3>
-          <p class="text-muted">📍 @room.Location</p>
+    @foreach (var room in Model)
+    {
+      <div class="col-md-6 col-lg-4">
+        <div class="card room-card h-100">
+          <div class="card-body">
+            <h3 class="card-title">@room.Name</h3>
+            <p class="text-muted">📍 @room.Location</p>
 
-          @if (!string.IsNullOrEmpty(room.Description))
+            @if (!string.IsNullOrEmpty(room.Description))
             {
               <p class="card-text">@room.Description</p>
             }
 
             <p>@room.Capacity people</p>
+            @if (room.EquipmentNames.Count > 0)
+            {
+              <p>🔧 @(string.Join(", ", room.EquipmentNames))</p>
+            }
           </div>
-            <div class="card-footer bg-white border-0 d-flex gap-2">
-                <a asp-controller="Booking" asp-action="Create" asp-route-roomId="@room.Id" class="btn btn-primary btn-sm flex-grow-1">
-                  Book
-                </a>
-                  <a asp-action="Edit" asp-route-id="@room.Id" class="btn btn-outline-secondary btn-sm">
-                    Edit
-                    </a>
-                      <a asp-action="Delete" asp-route-id="@room.Id" class="btn btn-outline-danger btn-sm">
-                        Delete
-                        </a>
-            </div>
-    </div>
-  </div>
+          <div class="card-footer bg-white border-0 d-flex gap-2">
+            <a asp-controller="Booking" asp-action="Create" asp-route-roomId="@room.Id"
+               class="btn btn-primary btn-sm flex-grow-1">
+              Book
+            </a>
+            <a asp-action="Edit" asp-route-id="@room.Id" class="btn btn-outline-secondary btn-sm">
+              Edit
+            </a>
+            <a asp-action="Delete" asp-route-id="@room.Id" class="btn btn-outline-danger btn-sm">
+              Delete
+            </a>
+          </div>
+        </div>
+      </div>
 
 
-}
+    }
   </div>
 </div>
 

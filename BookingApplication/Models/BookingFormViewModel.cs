@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Options;
 //using BookingApplication.Models.Validation;
 //usingen over blir uncommented etter at arvin har gjort sine deler, da blir den satt i bruk
 
@@ -22,11 +23,9 @@ public class BookingFormViewModel : IValidatableObject
   public DateTime Date { get; set; } = DateTime.Today;
 
   [Required]
-  [Range(typeof(TimeOnly), "09:00", "22:00", ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
   public TimeOnly StartTime { get; set; }
 
   [Required]
-  [Range(typeof(TimeOnly), "09:00", "22:00", ErrorMessage = "Study rooms can only be booked between 09:00 and 22:00.")]
   public TimeOnly EndTime { get; set; }
 
   [Range(1, 12, ErrorMessage = "Number of people must be between 1 and 12.")]
@@ -40,15 +39,27 @@ public class BookingFormViewModel : IValidatableObject
 
   public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
   {
+    var opens = new TimeOnly(9, 0);
+    var closes = new TimeOnly(22, 0);
+
+    if (StartTime < opens || StartTime > closes)
+    {
+      yield return new ValidationResult(
+        "Study rooms can only be booked between 09:00 and 22:00",
+        new[]{ nameof(StartTime)});
+    }
+    if (EndTime < opens || EndTime > closes)
+    {
+      yield return new ValidationResult(
+        "Study rooms can only be booked between 09:00 and 22:00",
+        new[] {nameof(EndTime)});
+    }
     if (EndTime <= StartTime)
     {
       yield return new ValidationResult(
           "The end time must be after the start time",
-          new[] { nameof(EndTime) }
-      );
+          new[] { nameof(EndTime) });
     }
   }
-
-
 }
 

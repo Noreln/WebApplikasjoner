@@ -1,0 +1,32 @@
+@model BookingListItemViewModel
+@{
+  ViewData["Title"] = "Cancel Booking";
+}
+
+<div class="container">
+  <div class="text-center mb-4">
+    <h1>Cancel Booking</h1>
+  </div>
+  <div class="row justify-content-center">
+    <div class= "col-md-6">
+      <div class="card room-card">
+        <div class="card-body text-center">
+
+          <p class="fs-5">Are you sure you want to cancel this booking?</p>
+
+          <p class="mb-1"><strong>@Model.RoomName</strong></p>
+          <p class="text-muted mb-1">📍 @Model.RoomLocation</p>
+          <p class="text-muted mb-1">📅 @Model.Date.ToString("yyyy-MM-dd") &middot; 🕐 @Model.StartTime-@Model.EndTime</p>
+          <p class="text-muted mb-1">👥 @Model.People people</p>
+
+          <form asp-action="Cancel" asp-route-id="@Model.Id" method="post"
+                class="d-flex gap-2 justify-content-center mt-3">
+            <button type="submit" class="btn btn-danger">Yes, cancel booking</button>
+            <a asp-controller="Home" asp-action="MyBookings" class="btn btn-outline-secondary">Back</a>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,63 @@
+@model MyBookingsViewModel
 @{
     ViewData["Title"] = "My Bookings";
 }
 
-<div class="text-center">
-    <h1 class="display-4">@ViewData["Title"]</h1>
+<div class="container">
+
+    <div class="text-center mb-4">
+        <h1>My Bookings</h1>
+        <p class="text-muted">Enter the name you booked with to see your bookings</p>
+    </div>
+
+    <form asp-action="MyBookings" method="get" class="row g-2 justify-content-center mb-4">
+        <div class="col-md-5">
+            <input asp-for="Name" class="form-control" placeholder="Your name">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">🔍 Show</button>
+        </div>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    @if (Model.HasSearched && Model.Bookings.Count == 0 && string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <p class="text-muted text-center">No bookings found for "@Model.Name".</p>
+    }
+
+    <div class="row g-4">
+        @foreach (var booking in Model.Bookings)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card room-card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title">@booking.RoomName</h3>
+                        <p class="text-muted">📍 @booking.RoomLocation</p>
+                        <p class="mb-1">📅 @booking.Date.ToString("yyyy-MM-dd")</p>
+                        <p class="mb-1">🕐 @booking.StartTime-@booking.EndTime</p>
+                        <p>👥 @booking.People people</p>
+
+                        @if (booking.IsPast)
+                        {
+                            <span class="badge bg-secondary">Past</span>
+                        }
+                    </div>
+                    @if (!booking.IsPast)
+                    {
+                        <div class="card-footer bg-white border-0 d-flex gap-2">
+                            <a asp-controller="Booking" asp-action="Edit" asp-route-id="@booking.Id"
+                               class="btn btn-outline-secondary btn-sm flex-grow-1">Edit</a>
+                            <a asp-controller="Booking" asp-action="Cancel" asp-route-id="@booking.Id"
+                               class="btn btn-outline-danger btn-sm">Cancel</a>
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+        }
+    </div>
 </div>
