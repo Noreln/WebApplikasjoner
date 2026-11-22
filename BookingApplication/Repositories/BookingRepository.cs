@@ -52,4 +52,9 @@ public class BookingRepository : IBookingRepository
     await _db.SaveChangesAsync();
   }
 
+    public async Task<int> CountUpcomingByRoomAsync(int roomId)
+  {
+    return await _db.Bookings
+    .CountAsync(b => b.RoomId == roomId && b.Date >= DateTime.Today);
+  }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BookingApplication.Models;
 using BookingApplication.Repositories;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookingApplication.Controllers;
 
@@ -9,13 +10,16 @@ public class RoomController : Controller
   private readonly IRoomRepository _roomRepository;
   private readonly IEquipmentRepository _equipmentRepository;
   private readonly ILogger<RoomController> _logger;
+  private readonly IBookingRepository _bookingRepository;
 
   public RoomController(IRoomRepository roomRepository,
   IEquipmentRepository equipmentRepository,
+  IBookingRepository bookingRepository,
   ILogger<RoomController> logger)
   {
     _roomRepository = roomRepository;
     _equipmentRepository = equipmentRepository;
+    _bookingRepository = bookingRepository;
     _logger = logger;
   }
 
@@ -80,7 +84,7 @@ public class RoomController : Controller
     {
       _logger.LogError(ex, "Failed to create room {Name}.", model.Name);
       ModelState.AddModelError(string.Empty, "Something went wrong while saving the room. Please try again.");
-      // The checkbox list is not releoaded here, since the database may be the problem
+      // The checkbox list is not reloaded here, since the database may be the problem
       return View(model);
     }
   }
@@ -178,16 +182,22 @@ public class RoomController : Controller
   {
     try
     {
-      Room? room = await _roomRepository.GetByIdAsync(id);
-      if (room == null)
+      RoomDeleteViewModel? model = await BuildDeleteModelAsync(id);
+      if (model == null)
       {
         return NotFound();
       }
-      return View(room);
+
+      if (!model.CanDelete)
+      {
+        ModelState.AddModelError(string.Empty,
+        $"This room has {model.UpcomingBookingCount} upcoming booking(s) and can't be deleted.");
+      }
+      return View(model);
     }
     catch (Exception ex)
     {
-      _logger.LogError(ex, "Failed to load room {RoomId} for deletion", id);
+      _logger.LogError(ex, "Failed to load room {RoomId} for deletion.", id);
       return RedirectToAction("Error", "Home");
     }
   }
@@ -202,6 +212,16 @@ public class RoomController : Controller
       if (room == null)
       {
         return NotFound();
+      }
+
+      int upcomingCount = await _bookingRepository.CountUpcomingByRoomAsync(id);
+      if (upcomingCount > 0)
+      {
+        _logger.LogWarning("Blocked deletion of room {RoomId} because it has {Count} upcoming bookings.",
+        id, upcomingCount);
+        ModelState.AddModelError(string.Empty,
+        $"This room has {upcomingCount} upcoming booking(s) and can't be deleted.");
+        return View("Delete", await BuildDeleteModelAsync(id));
       }
 
       await _roomRepository.DeleteAsync(room);
@@ -221,5 +241,22 @@ public class RoomController : Controller
     model.AvailableEquipment = allEquipment
     .Select(e => new EquipmentListItemViewModel { Id = e.Id, Name = e.Name })
     .ToList();
+  }
+
+  private async Task<RoomDeleteViewModel?> BuildDeleteModelAsync(int id)
+  {
+    Room? room = await _roomRepository.GetByIdAsync(id);
+    if (room == null)
+    {
+      return null;
+    }
+
+    return new RoomDeleteViewModel
+    {
+      Id = room.Id,
+      Name = room.Name,
+      Location = room.Location,
+      UpcomingBookingCount = await _bookingRepository.CountUpcomingByRoomAsync(id)
+    };
   }
 }
