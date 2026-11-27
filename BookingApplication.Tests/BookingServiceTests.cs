@@ -14,45 +14,7 @@ namespace BookingApplication.Tests;
 public class BookingServiceTests
 {
 
-// One fixed day, so the tests do not depend on todays date
-private static readonly DateTime Day = new(2030, 1, 15);
 
-private readonly Mock<IRoomRepository> _rooms = new();
-
-private readonly Mock<IBookingRepository> _bookings = new();
-
-private BookingServiceTests CreateService() =>
-new(_rooms.Object, _bookings.Object, NullLogger<BookingService>.Instance);
-
-private static TimeOnly At(int hour) => new(hour, 0);
-
-private static Room MakeRoom(int id, int capacity = 6) =>
-new() { id = id, Name = $"Room {id}", Location = "Library", Capacity = capacity, Description = "Test room" };
-
-private static BookingApplication MakeBooking(int id, int roomId, int startHour, int endHour, int people  = 2) =>
-new()
-{
-  Id = id,
-  RoomId = roomId,
-  BookedBy = "Anna",
-  Date = Day,
-  StartTime = At(startHour),
-  EndTime = At(endHour),
-  People = people
-};
-
-// The repository returns these bookings for the room and day that ValidateBookingAsync asks for
-private void GivenBookingsInRoom(int roomId, params Booking[] existing) =>
-_bookings.Setup(base => base.GetByRoomAndDateAsync(roomId, Day)).ReturnsAsync(existing.ToList());
-
-// THe repositories return these rooms and bookings for SearchRooms
-
-private void GivenSearchData(int people, List<Room> rooms, List<Booking> bookingsThatDay)
-{
-  _rooms.Setup(ref => ref.GetRoomsByMinCapacity(people)).ReturnsAsync(rooms);
-  _bookings.Setup(b => b.GetByDateAsync(Day)).ReturnsAsync(bookingsThatDay);
-  
-}
 
 
 // Positive tests: 
@@ -77,21 +39,21 @@ private void GivenSearchData(int people, List<Room> rooms, List<Booking> booking
 
 // Negative tests
 
-// 7 - A booking that partly overlaps an existing one is rejected with an overlap error.
+// 7
 
 
-// 8 - A booking placed completely inside an existing one is rejected.
+// 8
 
 
-// 9 - A group larger than the rooms capacity is rejected with an error on People.
+// 9
 
 
-// 10 - A booking that overlaps and is too large is rejected with both errors.
+// 10
 
 
-// 11 - A room booked at the requested time is left out of the search results.
+// 11
 
 
-// 12 - When every room is booked, the search returns an empty list.
+// 12
 
 }
