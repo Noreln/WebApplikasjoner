@@ -72,19 +72,88 @@ public async Task Validate_NoExistingBookings_ReturnsNoErrors()
 }
 
 // 2 - A booking that starts exactly when another one ends is accepted.
+[Fact]
+public async Task Validate_BookingStartsWhenAnotherEnds_ReturnsNoErrors()
+{
+  // Existing 10-12 and new 12-14 only touch each other, so they do not overlap
+  // Given
+  Room room = MakeRoom(1);
+  GivenBookingsInRoom(1, MakeBooking(5, 1, 10, 12));
+
+  // When
+List<BookingRuleError> errors = await CreateService().ValidateBookingAsync(MakeBooking(0, 1, 12, 14), room);
+
+  // Then
+  Assert.Empty(errors);
+}
 
 
 // 3 - A group exactly as large as the rooms capacity is accepted.
+[Fact]
+public async Task Validate_PeopleEqualToCapacity_ReturnsNoErrors()
+{
+  // Given
+  Room room = MakeRoom(1, capacity: 4);
+  GivenBookingsInRoom(1);
 
+  // When
+  List<BookingRuleError> errors = await CreateService().ValidateBookingAsync(MakeBooking(0, 1, 10, 12, people: 4), room);
+  
+  // Then
+  Assert.Empty(errors);
+}
 
 // 4 - Editing a booking does not make it clash with its own old time.
+[Fact]
+public async Task Validate_EditingBooking_IgnoresItselfInOverlapCheck()
+{
+  // Given
+  Room room = MakeRoom(1);
+  GivenBookingsInRoom(1, MakeBooking(7, 1, 10, 12));
+  Booking edited = MakeBooking(7, 1, 10, 11);
+
+  // When
+  List<BookingRuleError> errors = await CreateService().ValidateBookingAsync(edited, room, excludeBookingId: 7);
+
+  // Then
+  Assert.Empty(errors);
+}
 
 
 // 5 - With no bookings, the search returns every room that fits the group, with the right details. 
+[Fact]
+public async Task SearchRooms_NoBookings_ReturnsAllRoomsThatFit()
+{
+  // Given
+  GivenSearchData(4, new List<Room> { MakeRoom(1, 6), MakeRoom(2, 10) }, new List<Booking>());
+
+  // When
+  List<AvailableRoomViewModel> result = await CreateService().SearchRooms(Day, At(10), At(12), 4);
+  
+  // Then
+  Assert.Equal(2, result.Count);
+  Assert.Equal("Room 1", result[0].Name);
+  Assert.Equal(6, result[0].Capacity);
+  Assert.Equal("Library", result[0].Location);
+}
 
 
 // 6 - A booking in one room does not remove a different room from the search results. 
+[Fact]
+public async Task SearchRooms_BookingInAnotherRoom_KeepsTheRoomInTheResults()
+{
+  // Room 2 is booked at the requested time, room 1 is free
+  // Given
+  GivenSearchData(2, new List<Room> { MakeRoom(1), MakeRoom(2) },
+  new List<Booking> { MakeBooking(5, 2, 10, 12) });
 
+  // When
+  List<AvailableRoomViewModel> result = await CreateService().SearchRooms(Day, At(10), At(12), 2);
+
+  // Then
+  Assert.Single(result);
+  Assert.Equal(1, result[0].Id);
+}
 
 
 // Negative tests
