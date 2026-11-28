@@ -21,15 +21,15 @@ private readonly Mock<IRoomRepository> _rooms = new();
 
 private readonly Mock<IBookingRepository> _bookings = new();
 
-private BookingServiceTests CreateService() =>
+private BookingService CreateService() =>
 new(_rooms.Object, _bookings.Object, NullLogger<BookingService>.Instance);
 
 private static TimeOnly At(int hour) => new(hour, 0);
 
 private static Room MakeRoom(int id, int capacity = 6) =>
-new() { id = id, Name = $"Room {id}", Location = "Library", Capacity = capacity, Description = "Test room" };
+new() { Id = id, Name = $"Room {id}", Location = "Library", Capacity = capacity, Description = "Test room" };
 
-private static BookingApplication MakeBooking(int id, int roomId, int startHour, int endHour, int people  = 2) =>
+private static Booking MakeBooking(int id, int roomId, int startHour, int endHour, int people = 2) =>
 new()
 {
   Id = id,
@@ -43,13 +43,13 @@ new()
 
 // The repository returns these bookings for the room and day that ValidateBookingAsync asks for
 private void GivenBookingsInRoom(int roomId, params Booking[] existing) =>
-_bookings.Setup(base => base.GetByRoomAndDateAsync(roomId, Day)).ReturnsAsync(existing.ToList());
+_bookings.Setup(b => b.GetByRoomAndDateAsync(roomId, Day)).ReturnsAsync(existing.ToList());
 
 // THe repositories return these rooms and bookings for SearchRooms
 
 private void GivenSearchData(int people, List<Room> rooms, List<Booking> bookingsThatDay)
 {
-  _rooms.Setup(ref => ref.GetRoomsByMinCapacity(people)).ReturnsAsync(rooms);
+  _rooms.Setup(r => r.GetRoomsByMinCapacity(people)).ReturnsAsync(rooms);
   _bookings.Setup(b => b.GetByDateAsync(Day)).ReturnsAsync(bookingsThatDay);
   
 }
@@ -57,7 +57,19 @@ private void GivenSearchData(int people, List<Room> rooms, List<Booking> booking
 
 // Positive tests: 
 // 1 - A valid booking in a free room is accepted with no errors.
+[Fact]
+public async Task Validate_NoExistingBookings_ReturnsNoErrors()
+{
+  // Given
+  Room room = MakeRoom(1, capacity: 6);
+  GivenBookingsInRoom(1);
 
+  // When
+  List<BookingRuleError> errors = await CreateService().ValidateBookingAsync(MakeBooking(0, 1, 10, 12), room);
+
+  // Then
+  Assert.Empty(errors);
+}
 
 // 2 - A booking that starts exactly when another one ends is accepted.
 
